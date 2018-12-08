@@ -2,6 +2,12 @@ defmodule PlugAbsintheWeb.Router do
   use Plug.Router
   use Plug.Builder
 
+  plug(Plug.Static,
+    at: "/",
+    from: :plug_absinthe,
+    only: ~w(favicon.ico images robots.txt)
+  )
+
   plug(Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json, Absinthe.Plug.Parser],
     json_decoder: Poison
@@ -23,7 +29,7 @@ defmodule PlugAbsintheWeb.Router do
     ]
   )
 
-  get "/hello" do
-    send_resp(conn, 200, "world")
+  match _ do
+    send_resp(conn, 404, "not found")
   end
 end
