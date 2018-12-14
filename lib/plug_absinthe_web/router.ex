@@ -10,13 +10,16 @@ defmodule PlugAbsintheWeb.Router do
 
   plug(Plug.Parsers,
     parsers: [:urlencoded, :multipart, :json, Absinthe.Plug.Parser],
+    pass: ["*/*"],
     json_decoder: Poison
   )
+
+  plug(CORSPlug, origin: "*")
 
   plug(:match)
   plug(:dispatch)
 
-  forward("/api",
+  forward("/graphql",
     to: Absinthe.Plug,
     init_opts: [schema: PlugAbsintheWeb.Schema]
   )
@@ -24,8 +27,8 @@ defmodule PlugAbsintheWeb.Router do
   forward("/graphiql",
     to: Absinthe.Plug.GraphiQL,
     init_opts: [
-      schema: PlugAbsintheWeb.Schema,
-      interface: :simple
+      schema: PlugAbsintheWeb.Schema
+      # interface: :simple
     ]
   )
 
